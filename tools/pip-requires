@@ -1,0 +1,4 @@
+# Horizon Core Requirements
+Django>=1.4
+django_compressor
+MySQL-python
