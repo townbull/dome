@@ -1,5 +1,6 @@
 # Horizon Core Requirements
+distribute
 Django>=1.4
 django_compressor
-MySQL-python
+mysql-python
 pydrive
