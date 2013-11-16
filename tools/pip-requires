@@ -2,5 +2,5 @@
 distribute
 Django>=1.4
 django_compressor
-#mysql-python
+MySQL-python<=1.1
 pydrive
