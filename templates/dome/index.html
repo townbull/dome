@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+{% if obj_list %}
+    <ul>
+    {% for obj in obj_list %}
+        <li><a href="/polls/{{ obj.id }}/">{{ obj.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Objects are not available.</p>
+{% endif %}
+</body>
+</html>
