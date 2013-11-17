@@ -91,6 +91,8 @@ def check_dependencies():
             die('easy_install not found.\n\nInstall easy_install'
                 ' (python-setuptools in ubuntu) or virtualenv by hand,'
                 ' then rerun.')
+    
+    #install support for mysql-python package on Ubuntu
     run_command(['sudo', 'apt-get', 'install', 'libmysqlclient-dev', 'python-dev'])
     print 'dependency check done.'
 
