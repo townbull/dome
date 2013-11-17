@@ -91,6 +91,7 @@ def check_dependencies():
             die('easy_install not found.\n\nInstall easy_install'
                 ' (python-setuptools in ubuntu) or virtualenv by hand,'
                 ' then rerun.')
+    run_command(['sudo', 'apt-get', 'install', 'libmysqlclient-dev', 'python-dev'])
     print 'dependency check done.'
 
 
@@ -127,11 +128,11 @@ def install_dependencies(venv=VENV):
     f = open(pthfile, 'w')
     f.write("%s\n" % ROOT)
 
-
+"""
 def install_horizon():
     print 'Installing horizon module in development mode...'
     run_command([WITH_VENV, 'python', 'setup.py', 'develop'], cwd=ROOT)
-
+"""
 
 def print_summary():
     summary = """
