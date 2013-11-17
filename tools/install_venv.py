@@ -93,7 +93,7 @@ def check_dependencies():
                 ' then rerun.')
     
     #install support for mysql-python package on Ubuntu
-    run_command(['sudo', 'apt-get', 'install', 'libmysqlclient-dev', 'python-dev'])
+    #run_command(['sudo', 'apt-get', 'install', 'libmysqlclient-dev', 'python-dev'])
     print 'dependency check done.'
 
 
