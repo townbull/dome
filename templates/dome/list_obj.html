@@ -1,0 +1,146 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container">
+{% with messages= get_flashed_messages(with_categories=true) %}
+{% if messages %}
+  {% for category, msg in messages %}
+<div class="alert alert-{{category}} fade in">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>{{ msg }}</strong>
+</div>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+<div class="row">
+	<div class="pull-right">
+		<div class="pull-left" style="padding-right: 60px;">
+		  	<a id="refresh" class="btn" href="/home/?container={{container}}" rel="tooltip" title="Refresh List"><i class="icon-refresh"></i></a>
+		  	<a id="upload" class="btn" href="#uploadModal" rel="tooltip" title="Upload" data-toggle="modal" data-target="#uploadModal"><i class="icon-upload"></i></a>
+		    <a id="download" class="btn" href="#" rel="tooltip" title="Download"><i class="icon-download-alt"></i></a>
+		    <a id="remove" class="btn" href="#" rel="tooltip" title="Remove" data-toggle="modal" data-target="#removeModal"><i class="icon-trash"></i></a>
+		</div>
+
+	    <div class="input-prepend pull-right">
+		  <span class="add-on"><i class="icon-search"></i></span>
+		  <input class="span2" id="prependedInput" type="text" placeholder="Search Swiftbox">
+		</div>
+
+	</div>
+
+	<div>
+	<ul class="breadcrumb lead">
+	  <li><a href="{{url_for('home')}}">Home</a> <span class="divider">/</span></li>
+	  <li class="active">{{container}}</li>
+	</ul>
+	</div>
+</div>
+
+<!-- Modal -->
+<div id="uploadModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+   <form class="modal-form" action="/upload/{{ container }}/" method=POST enctype=multipart/form-data>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="updateModalLabel">Upload</h3>
+  </div>
+  <div class="modal-body">
+    <div>
+        <input type=file name=file class="btn span6" />
+    </div>
+    <div class="lead">
+      <h5>Segment Size: <input class="span2" name="segsize" type="text" style="text-align: right" placeholder="0B"/>
+      <a href="#" id="segHelp" rel="tooltip" title="Example: 1B, 2K, 3M"><i class="icon-question-sign"></i></a></h5>
+    </div>
+  </div>
+  <div class="modal-footer">
+  <div class="progress progress-striped active span3 pull-left" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="bar" style="width: 0%;"></div>
+  </div>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Later</button>
+    <button id="uploadBtn" type="submit" class="btn btn-primary" data-loading-text="Uploading..." data-complete-text="Complete!">Upload Now</button>
+  </div>
+</form>
+</div>
+
+
+
+<table class="table table-hover" style="padding-bottom:50px;">
+	<!-- Table header -->
+	<thead>
+    	<tr>
+	    	<th class="span1"><input type="checkbox" class="pull-right" name="select-all" id="select-all"></th>
+	    	<th class="span6">Name</th>
+	    	<th class="span2">Size</th>
+	    	<th>Modified</th>
+        </tr>
+    </thead>
+
+	<!-- Table body -->
+	<tbody>
+   {% if result[0] == 0 %}
+    {% for item in result[1] %}
+
+<!-- Modal -->
+<div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden = "true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="removeModalLabel">Removing</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to remove "{{container}}/{{item["name"]}}"?</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <a class="btn btn-primary"
+href="/delete_obj/?container={{container}}&obj={{item['name']}}"
+>Remove Now</a>
+  </div>
+</div>
+
+		<tr>
+			<td><input type="checkbox" class="pull-right"></td>
+			<td>{{ item["name"] }}
+				<div class="objaction pull-right">
+					<a class="action" href="/download_obj/?container={{container}}&obj={{item['name']}}" rel="tooltip" title="Download"><i class="icon-download-alt"></i></a>
+					<a class="action"
+href="/delete_obj/?container={{container}}&obj={{item['name']}}"
+rel="tooltip" title="Remove"><i class="icon-trash"></i></a>
+
+          <a class="info" href="#" rel="popover" data-content="
+{%- for i in item %}
+ <p>{{i}}: {{item[i]}}</p>
+{%- endfor %}
+" title="Properties"><i class="icon-info-sign"></i></a>
+
+				</div>
+			</td>
+      {% set size = item['bytes']|int() %}
+      {% if size // 1024 == 0 %}
+			  <td>{{ size }} B</td>
+      {% elif size // (1024*1024) == 0 %}
+			  <td>{{ size //(1024)}} KB</td>
+      {% elif size // (1024*1024*1024) == 0 %}
+			  <td>{{ size //(1024*1024)}} MB</td>
+      {% elif size // (1024*1024*1024*1024) == 0 %}
+			  <td>{{ size //(1024*1024*1024)}} GB</td>
+      {%endif %}
+			<td>{{ item["last_modified"]}}</td>
+		</tr>
+	 {% endfor%}
+  {% endif %}
+	</tbody>
+
+
+    <!-- Table foot -->
+    <!--
+    <tfoot>
+	    <tr>
+		    <div class="alert">
+			  <button type="button" class="close" data-dismiss="alert">×</button>
+			  <strong>Warning!</strong> Best check yo self, you're not looking too good.
+			</div>
+	    </tr>
+    </tfoot>
+    -->
+</table>
+</div>
+{% endblock %}
