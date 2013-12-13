@@ -1,0 +1,274 @@
+{% load staticfiles %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+
+<title>SKYMESH</title>
+
+<script type="text/javascript">
+    window.onload = function()
+    {
+        if(!window.jQuery)
+        {
+            alert('jQuery not loaded');
+        }
+        else
+        {
+            $(document).ready(function(){
+				$('.btn').tooltip({'placement':'top', 'trigger' : 'hover'});
+				$('.btn-link').tooltip({'placement':'top', 'trigger' : 'hover'});
+				<!-- $('.text-info').popover({'placement':'right', 'trigger' : 'hover', 'html' : 'true'}); -->
+				$('.action').tooltip({'placement':'bottom', 'trigger' : 'hover'});
+				$('.info').popover({'placement':'bottom', 'trigger' : 'hover', 'html' : 'true'});
+				$('#segHelp').tooltip({'placement':'right', 'trigger' : 'hover'});
+				$(".alert").alert();
+
+            });
+
+            $("#uploadBtn").click(function(){
+	            $(this).button('loading');
+	           <!-- $(this).button('complete'); -->
+            });
+
+
+            $('#select-all').click(function(event) {
+			    if(this.checked) {
+			        // Iterate each checkbox
+			        $(':checkbox').each(function() {
+			            this.checked = true;
+			        });
+			    }
+			    else{
+			    	// Iterate each checkbox
+			    	$(':checkbox').each(function() { this.checked = false; });
+			    }
+			});
+
+			<!--
+			$('#listTable tbody tr').click(function(event) {
+			    var cls = $(this).attr("class");
+				if(cls == 'clickRow'){
+					$(this).removeClass('clickRow');
+				}
+				else{
+					$(this).addClass('clickRow');
+				}
+			});
+			-->
+        }
+    }
+</script>
+<style>
+	[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }
+</style>
+</head>
+
+<body>
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="container">
+
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+
+      <!-- Be sure to leave the brand out there if you want it shown -->
+      <a class="brand" href="#">Skymesh</a>
+
+      <!-- Everything you want hidden at 940px or less, place within here -->
+      <div class="nav-collapse collapse">
+        <!-- .nav, .navbar-search, .navbar-form, etc -->
+        <ul class="nav pull-right">
+		  <li class="dropdown">
+		    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		      User
+		      <b class="caret"></b>
+		    </a>
+		    <ul class="dropdown-menu">
+		      <li><a href="#"><i class="icon-edit"></i> Settings </a></li>
+			    <li><a href="#"><i class="icon-retweet"></i> Reset Password </a></li>
+			    <li><a href="#"><i class=" icon-question-sign"></i> Help </a></li>
+			    <li class="divider"></li>
+			    <li><a href="#">Sign out</a></li>
+		    </ul>
+		  </li>
+		</ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+<!--
+<div class="alert alert-success fade in">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Well done!</strong> You successfully read this important alert message.
+</div>
+<div class="alert alert-block fade in">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Warning!</strong> Best check yo self, you're not looking too good.
+</div>
+<div class="alert alert-error fade in">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  <strong>Oh snap!</strong> Change a few things up and try submitting again.
+</div>
+-->
+<div class="row">
+	<div class="pull-right" style="margin-top:10px; margin-right:10px">
+		<div class="pull-left" style="padding-right: 60px;">
+		  	<a id="refresh" class="btn" href="#" rel="tooltip" title="Refresh List"><i class="icon-refresh"></i></a>
+		  	<a id="upload" class="btn" href="#uploadModal" rel="tooltip" title="Upload" data-toggle="modal" data-target="#uploadModal"><i class="icon-folder-open"></i></a>
+		    <a id="download" class="btn" href="#" rel="tooltip" title="Download"><i class="icon-download-alt"></i></a>
+		    <a id="remove" class="btn" href="#" rel="tooltip" title="Remove" data-toggle="modal" data-target="#removeModal"><i class="icon-trash"></i></a>
+		</div>
+
+	    <div class="input-prepend pull-right">
+		  <span class="add-on"><i class="icon-search"></i></span>
+		  <input class="span2" id="prependedInput" type="text" placeholder="Search">
+		</div>
+
+	</div>
+
+	<div>
+	<ul class="breadcrumb lead">
+	  <li><a href="#">Home</a> <span class="divider">/</span></li>
+	  <li><a href="#">GoogleDrive</a> <span class="divider">/</span></li>
+	  <li class="active">Folder1</li>
+	</ul>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div id="uploadModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel" aria-hidden="true">
+   <form class="modal-form" action="/upload/{{ container }}/" method=POST enctype=multipart/form-data>
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="updateModalLabel">Upload</h3>
+  </div>
+  <div class="modal-body">
+    <div>
+        <input type=file name=file class="btn span6" />
+    </div>
+	<div class="lead">
+		<h5>Segment Size: <input class="span1" name="segsize" type="text" style="text-align: right" placeholder="0B"/>
+		<a href="#" id="segHelp" rel="tooltip" title="Example: 1B, 2K, 3M"><i class="icon-question-sign"></i></a></h5>
+	</div>
+
+
+	  <!--
+	  <div class="btn-group" data-toggle="buttons-radio">
+	  	<button type="button" class="btn">8</button>
+	  	<button type="button" class="btn">16</button>
+	  	<button type="button" class="btn">32</button>
+	  	<button type="button" class="btn">64</button>
+	  	<button type="button" class="btn">128</button>
+	  	<button type="button" class="btn">256</button>
+	  	<button type="button" class="btn active">No Segmentation</button>
+	  </div>
+    -->
+
+
+  </div>
+  <div class="modal-footer">
+  <div class="progress progress-striped active span3 pull-left" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+		<div class="bar" style="width: 0%;"></div>
+	</div>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Later</button>
+    <button id="uploadBtn" type="submit" class="btn btn-primary" data-loading-text="Uploading..." data-complete-text="Complete!">Upload Now</button>
+  </div>
+    </form>
+
+</div>
+
+
+<!-- Modal -->
+<div id="removeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="removeModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 id="removeModalLabel">Removing</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure to remove this file?</p>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary">Remove</button>
+  </div>
+</div>
+
+
+<table id="listTable" class="table table-hover">
+	<!-- Table header -->
+	<thead>
+    	<tr>
+	    	<th class="span1"><input type="checkbox" class="pull-right" name="select-all" id="select-all"></th>
+	    	<th class="span5">Name</th>
+	    	<th class="span2">Size</th>
+	    	<th>Modified</th>
+        </tr>
+    </thead>
+{% if obj_list %}
+	<!-- Table body -->
+	<tbody>
+
+    {% for obj in obj_list %}
+    <tr>
+			<td><input type="checkbox" class="pull-right"></td>
+			<td><a href="/view/{{ obj.id }}" class="text-info">{{ obj.title }}</a>
+				<div class="objaction pull-right">
+					<a class="action" href="#" rel="tooltip" title="Download"><i class="icon-download-alt"></i></a>
+					<a class="action" href="#" rel="tooltip" title="Remove" data-toggle="modal" data-target="#removeModal"><i class="icon-trash"></i></a>
+					<a class="info" href="#" rel="popover" data-content="<p>Size: 10MB</p> <p>MD5:123489djf92923jd99921k1hddf83</p>" title="Properties"><i class="icon-info-sign"></i></a>
+				</div>
+			</td>
+			<td>1.0 MB</td>
+			<td>2012-12-01 08:00:00</td>
+		</tr>
+    {% endfor %}
+    </tbody>
+{% else %}
+    <p>Objects are not available.</p>
+{% endif %}
+
+
+
+    <!-- Table foot -->
+    <!--
+    <tfoot>
+	    <tr>
+		    <div class="alert">
+			  <button type="button" class="close" data-dismiss="alert">×</button>
+			  <strong>Warning!</strong> Best check yo self, you're not looking too good.
+			</div>
+	    </tr>
+    </tfoot>
+    -->
+</table>
+</div>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+</body>
+</html>
