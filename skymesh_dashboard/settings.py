@@ -47,6 +47,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'dome',
+    'kiwi',
+    'acorn',
 )
 
 MIDDLEWARE_CLASSES = (

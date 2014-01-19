@@ -5,3 +5,4 @@ django_compressor
 MySQL-python
 pydrive
 oauth2client
+dropbox>=2.0.0
