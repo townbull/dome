@@ -1,8 +1,8 @@
 from django.conf.urls import patterns, url
+import views
 
-from .views import IndexView, authredirect
 
 urlpatterns = patterns('',
-    url(r'^$', authredirect, name='authredirect'),
-    url(r'^gdrive/$', IndexView.as_view(), name='index'),
+    url(r'^$', views.authredirect, name='authredirect'),
+    url(r'^gdrive/$', views.IndexView.as_view(), name='index'),
 )
