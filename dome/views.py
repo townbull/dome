@@ -5,12 +5,17 @@ from django.views import generic
 from skymesh_dashboard import settings
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from django.contrib.auth.decorators import login_required
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
-
 def authredirect(request):
+    auth_url = request.build_absolute_uri() + "auth/login/"
+    return HttpResponseRedirect(auth_url)
+
+
+def oauthredirect(request):
     gauth = GoogleAuth()
     gauth.GetFlow()
     oauth_callback = request.build_absolute_uri() + "gdrive"

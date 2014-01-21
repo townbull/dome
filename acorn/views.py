@@ -23,5 +23,5 @@ def login_user(request):
         else:
             state = "Your username and/or password were incorrect."
 
-    return render_to_response('acorn/auth.html',
+    return render_to_response('acorn/login.html',
                               dict({'state':state, 'username': username}, **c))
