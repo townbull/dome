@@ -20,7 +20,7 @@ def authredirect(request):
 
 
 class IndexView(generic.ListView):
-    template_name = 'dome/index.html'
+    template_name = 'dome/home.html'
     context_object_name = 'obj_list'
     code = ""
 
