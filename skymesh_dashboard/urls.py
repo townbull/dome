@@ -10,6 +10,6 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/$', include(admin.site.urls)),
-    url(r'auth/', include('acorn.urls')),
-    url(r'', include('dome.urls')),
+    url(r'^auth/', include('acorn.urls')),
+    url(r'^', include('dome.urls')),
 )

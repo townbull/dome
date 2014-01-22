@@ -1,21 +1,16 @@
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
-#from dome.auth import BaseDriveHandler, DriveState
-from skymesh_dashboard import settings
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
-from django.contrib.auth.decorators import login_required
-
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
+
+@login_required
 def authredirect(request):
-    auth_url = request.build_absolute_uri() + "auth/login/"
-    return HttpResponseRedirect(auth_url)
-
-
-def oauthredirect(request):
     gauth = GoogleAuth()
     gauth.GetFlow()
     oauth_callback = request.build_absolute_uri() + "gdrive"
@@ -23,9 +18,8 @@ def oauthredirect(request):
     auth_url = gauth.GetAuthUrl()
     return HttpResponseRedirect(auth_url)
 
-
 class IndexView(generic.ListView):
-    template_name = 'dome/home.html'
+    template_name = 'dome/index.html'
     context_object_name = 'obj_list'
     code = ""
 

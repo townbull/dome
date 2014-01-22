@@ -27,12 +27,13 @@
 
     <div class="container">
 
+
       <form class="form-signin" role="form" action="/auth/login/" method="post">
         {% csrf_token %}
         {% if next %}
         <input type="hidden" name="next" value="{{ next }}" />
         {% endif %}
-        <h2 class="form-signin-heading">{{ state }}</h2>
+        <h2 class="form-signin-heading">Welcome to Skymesh</h2>
         <input type="text" class="form-control" placeholder="Email address"
                name="username" value="{{ username }}" required autofocus>
         <input type="password" class="form-control" placeholder="Password"
@@ -40,6 +41,12 @@
         <label class="checkbox">
           <input type="checkbox" value="remember-me"> Remember me
         </label>
+        {% if state != "OK" %}
+          <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            Invalid username or password!
+          </div>
+        {% endif %}
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
       </form>
 

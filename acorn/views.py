@@ -1,14 +1,23 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from skymesh_dashboard.settings import LOGIN_URL
 
 
-def login_user(request):
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+
+def login_view(request):
     c = {}
     c.update(csrf(request))
-    state = "Please log in below..."
-    username = ''
-    password = ''
+    state = "OK"
+    # username = ''
+    # password = ''
     if request.POST:
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -17,11 +26,13 @@ def login_user(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                state = "You're successfully logged in!"
+                #state = "You're successfully logged in!"
+                return redirect(request.POST.get('next'))
             else:
-                state = "Your account is not active, please contact the site admin."
+                state = "N/A"
         else:
-            state = "Your username and/or password were incorrect."
+            state = "AGAIN"
 
     return render_to_response('acorn/login.html',
-                              dict({'state':state, 'username': username}, **c))
+                              dict({'state':state,
+                                    'next':'/'}, **c))
