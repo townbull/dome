@@ -6,3 +6,4 @@ MySQL-python
 pydrive
 oauth2client
 dropbox>=2.0.0
+python-social-auth
