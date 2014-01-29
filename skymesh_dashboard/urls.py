@@ -11,5 +11,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/$', include(admin.site.urls)),
     url(r'^auth/', include('acorn.urls')),
+    url(r'^selector/', include('kiwi.urls')),
     url(r'^', include('dome.urls')),
 )
