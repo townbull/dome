@@ -3,13 +3,13 @@ from django.contrib.auth import authenticate, login
 from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from skymesh_dashboard.settings import LOGIN_URL
+from django.conf import settings
 
 
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    return redirect(getattr(settings, 'LOGIN_REDIRECT_URL', None))
 
 
 def login_view(request):
@@ -29,9 +29,9 @@ def login_view(request):
                 #state = "You're successfully logged in!"
                 return redirect(request.POST.get('next'))
             else:
-                state = "N/A"
+                state = "INACTIVE"
         else:
-            state = "AGAIN"
+            state = "INVALID"
 
     return render_to_response('acorn/login.html',
                               dict({'state':state,

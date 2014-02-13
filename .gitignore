@@ -4,3 +4,4 @@
 .venv/*
 *.pyc
 client_secrets*.json
+*.sqlite3

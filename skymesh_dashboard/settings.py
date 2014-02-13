@@ -35,6 +35,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 # Application definition
@@ -46,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social.apps.django_app.default',
     'dome',
     'kiwi',
     'acorn',
@@ -114,4 +117,22 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
+#SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
 LOGIN_URL = '/auth/login/'
+LOGIN_REDIRECT_URL = '/'
+# SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
+SOCIAL_AUTH_USERNAME_FORM_HTML = 'acorn/username_signup.html'
+
+AUTHENTICATION_BACKENDS = (
+  'social.backends.open_id.OpenIdAuth',
+  'social.backends.google.GoogleOpenId',
+  'social.backends.google.GoogleOAuth2',
+  'social.backends.google.GoogleOAuth',
+  'social.backends.dropbox.DropboxOAuth2',
+  'social.backends.username.UsernameAuth',
+
+  'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '263593193734-8gf5o4rn7c4litg0gqk5f9u5vfbqv310.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'JEotJtmMkGRmZRqU9eothCyD'
