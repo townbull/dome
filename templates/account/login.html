@@ -1,0 +1,50 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+{% load url from future %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+
+      <form class="form-signin" role="form" action="{% url 'account_login' %}" method="POST">
+
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% endif %}
+        <a href="/accounts/google/login/"><div class="google">Login with Google</div></a>
+        {% include "socialaccount/snippets/login_extra.html" %}
+        <p>Or sign in directly</p>
+        <input id="id_login" type="text" class="form-control" placeholder="Username or Email address"
+               name="login" value="{{ username }}" required autofocus/>
+        <input id="id_password" type="password" class="form-control" placeholder="Password"
+               name="password" value="" required/>
+        {{ form.login.errors }}
+        {{ form.password.errors }}
+        <div class="remember-forgot-section">
+            <input id="id_remember" name="remember" type="checkbox" />
+            <label for="id_remember">Remember Me</label>
+            <a class="forgot" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+        </div>
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+{#        {% if state != "OK" %}#}
+{#          <div class="alert alert-danger alert-dismissable">#}
+{#            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>#}
+{#            Invalid username or password!#}
+{#          </div>#}
+{#        {% endif %}#}
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{% trans "Sign In" %}</button>
+        <div class="footnote">
+            Don't have an account? Login with social accounts above or <a href="{% url 'account_signup' %}">Sign Up</a>
+        </div>
+       </form>
+    </div>
+{% endblock %}
+

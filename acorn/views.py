@@ -5,11 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.conf import settings
 
-
-@login_required
-def logout_view(request):
-    logout(request)
-    return redirect(getattr(settings, 'LOGIN_REDIRECT_URL', None))
+#
+# def logout_view(request):
+#     logout(request)
+#     return redirect(getattr(settings, 'LOGIN_URL', None))
 
 
 def login_view(request):

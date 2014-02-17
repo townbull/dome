@@ -35,8 +35,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.auth.context_processors.auth',
     'django.contrib.messages.context_processors.messages',
-    'social.apps.django_app.context_processors.backends',
-    'social.apps.django_app.context_processors.login_redirect',
+    # Required by allauth template tags
+    "django.core.context_processors.request",
+    # allauth specific context processors
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
 )
 
 # Application definition
@@ -48,11 +51,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social.apps.django_app.default',
     'dome',
     'kiwi',
     'acorn',
+    # The Django sites framework is required
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.dropbox',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.openid',
 )
+
+SITE_ID = 2
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -117,22 +131,67 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-#SOCIAL_AUTH_LOGIN_URL = '/auth/login/'
-LOGIN_URL = '/auth/login/'
-LOGIN_REDIRECT_URL = '/'
-# SOCIAL_AUTH_USERNAME_FORM_URL = '/signup-username'
-SOCIAL_AUTH_USERNAME_FORM_HTML = 'acorn/username_signup.html'
-
 AUTHENTICATION_BACKENDS = (
-  'social.backends.open_id.OpenIdAuth',
-  'social.backends.google.GoogleOpenId',
-  'social.backends.google.GoogleOAuth2',
-  'social.backends.google.GoogleOAuth',
-  'social.backends.dropbox.DropboxOAuth2',
-  'social.backends.username.UsernameAuth',
+    # Needed to login by username in Django admin, regardless of `allauth`
+    "django.contrib.auth.backends.ModelBackend",
 
-  'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    "allauth.account.auth_backends.AuthenticationBackend",
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '263593193734-8gf5o4rn7c4litg0gqk5f9u5vfbqv310.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'JEotJtmMkGRmZRqU9eothCyD'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# auth and allauth settings
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+SOCIALACCOUNT_QUERY_EMAIL = True
+
+
+# A sample logging configuration. The only tangible logging
+# performed by this configuration is to send an email to
+# the site admins on every HTTP 500 error when DEBUG=False.
+# See http://docs.djangoproject.com/en/dev/topics/logging for
+# more details on how to customize your logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    }
+}
+
+SOCIALACCOUNT_PROVIDERS = \
+{
+    'openid':
+        { 'SERVERS':
+            [dict(id='yahoo',
+                  name='Yahoo',
+                  openid_url='http://me.yahoo.com'),
+             dict(id='hyves',
+                  name='Hyves',
+                  openid_url='http://hyves.nl'),
+             dict(id='google',
+                  name='Google',
+                  openid_url='https://www.google.com/accounts/o8/id')],
+        },
+    'google':
+        { 'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
+          'AUTH_PARAMS': { 'access_type': 'online' }
+        }
+}
