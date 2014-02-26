@@ -150,7 +150,8 @@ $ source .venv/bin/activate
 
 def main():
     check_dependencies()
-    create_virtualenv()
+    if not hasattr(sys, 'real_prefix'):
+        create_virtualenv()
     install_dependencies()
     #install_horizon()
     print_summary()

@@ -12,7 +12,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core import serializers
-from models import FileInfo
+from kiwi.models import FileInfo
 import json
 import datetime
 from django.contrib.auth.decorators import login_required

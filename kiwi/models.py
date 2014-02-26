@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+
 class FileInfo(models.Model):
     #FIXME: find out  more specific max-length
     #for CharField, max_legnth is required

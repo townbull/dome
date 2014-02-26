@@ -90,13 +90,13 @@ WSGI_APPLICATION = 'skymesh_dashboard.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': os.path.join(BASE_DIR, 'dome.sqlite3'),                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'sql331206',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'USER': 'sql331206',
+        'PASSWORD': 'pF9!lC8%',
+        'HOST': 'sql3.freemysqlhosting.net',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '3306',                      # Set to empty string for default.
     }
 }
 
@@ -146,6 +146,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # auth and allauth settings
 LOGIN_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/console/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 
