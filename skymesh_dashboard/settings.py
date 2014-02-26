@@ -64,6 +64,9 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.dropbox',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.openid',
+
+    # database migration
+    'south',
 )
 
 SITE_ID = 2
