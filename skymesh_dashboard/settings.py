@@ -143,7 +143,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # auth and allauth settings
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/console/'
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 
@@ -192,6 +192,6 @@ SOCIALACCOUNT_PROVIDERS = \
         },
     'google':
         { 'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
-          'AUTH_PARAMS': { 'access_type': 'online' }
+          'AUTH_PARAMS': { 'access_type': 'offline' }
         }
 }

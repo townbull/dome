@@ -1,22 +1,28 @@
-from django.shortcuts import render, render_to_response, redirect
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.core import serializers
 from models import FileInfo
-import json, datetime
+import json
+import datetime
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
-# Create your views here.
 
 def Selector(request):
-    return render_to_response('kiwi/selector.html')
+    #print "request user:", request.user
+    if not request.user.is_authenticated():
+        login_url = getattr(settings, 'LOGIN_URL', None)
+        return redirect('%s?next=%s' % (login_url, request.path))
+    return render(request, 'kiwi/selector.html')
 
 
 def GooglePicker(request):
-    return
+    pass
 
 
 def DropboxChooser(request):
-    return
+    pass
+
 
 def SaveInfoGoogle(request):
     print 'jquery post received from google'
@@ -32,7 +38,7 @@ def SaveInfoGoogle(request):
         file.save()
         print 'google record save success'
 
-    return render_to_response('kiwi/selector.html')
+    return render(request, 'kiwi/selector.html')
 
 
 #@csrf_exempt
