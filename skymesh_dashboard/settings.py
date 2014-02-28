@@ -91,11 +91,11 @@ WSGI_APPLICATION = 'skymesh_dashboard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'sql331206',                      # Or path to database file if using sqlite3.
+        'NAME': 'smtestdb',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': 'sql331206',
-        'PASSWORD': 'pF9!lC8%',
-        'HOST': 'sql3.freemysqlhosting.net',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'USER': 'smtest',
+        'PASSWORD': 'smtest2014',
+        'HOST': 'skymesh-test-rds.ck0plysyz006.us-west-2.rds.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '3306',                      # Set to empty string for default.
     }
 }
