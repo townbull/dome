@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # prevent the extra are-you-sure-you-want-to-logout step on logout
-    #(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 
     url(r'^accounts/', include('allauth.urls')),
     url(r'^console/', include('dome.urls')),

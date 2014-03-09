@@ -20,6 +20,7 @@
         <input type="hidden" name="next" value="{{ next }}" />
         {% endif %}
         <a href="{% provider_login_url "google" %}"><div class="google">Login with Google</div></a>
+        <a href="{% provider_login_url "dropbox" %}"><div class="dropbox">Login with Dropbox</div></a>
         {% include "socialaccount/snippets/login_extra.html" %}
         <p>Or sign in directly</p>
         <input id="id_login" type="text" class="form-control" placeholder="Username or Email address"
