@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core import serializers
 from models import FileInfo
+from allauth.socialaccount.models import SocialToken
 import json
 import datetime
 from django.contrib.auth.decorators import login_required
@@ -57,11 +58,20 @@ def SaveInfoDropbox(request):
         file.save()
         print 'dropbox record save success'
 
-    return render_to_response('kiwi/selector.html')
+    return render('kiwi/selector.html')
         #json.loads(FileInfo.objects.all())
 
 def Showlist(request):
     files = FileInfo.objects.all()
     data = serializers.serialize('json', files)
     data = '{"files":'+ data + '}'
+    return HttpResponse(data, content_type='application/json')
+
+def GetToken(request):
+    accountId = request.POST.get('accountId')
+    record = SocialToken.objects.get(account=accountId)
+    token = record.token
+    print token
+    data = '{"token":"'+ token + '"}'
+    print data
     return HttpResponse(data, content_type='application/json')

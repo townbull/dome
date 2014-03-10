@@ -27,29 +27,44 @@
 
 
       <script type="text/javascript">
-        var developerKey = 'AIzaSyCl62qhKjnhpf2tEFEr94S8-ackQsMxiq0';
+
+
+      // The API developer key obtained from the Google Cloud Console.
+      var developerKey = 'AIzaSyCl62qhKjnhpf2tEFEr94S8-ackQsMxiq0';
+
+      // The Client ID obtained from the Google Cloud Console.
+      var clientId = '263593193734-9vp3qpd2o3ne178r7hv6g5lmfqnmred4.apps.googleusercontent.com';
+
+      // Scope to use to access user's photos.
+      var scope = ['https://www.googleapis.com/auth/drive.readonly'];
+
       var pickerApiLoaded;
       var pickerCreated = false;
       var authorized = false;
       var picker;
-      var oauthToken = "ya29.1.AADtN_X94WM7JiUwA6zQgbM1UW_Sa4I5JFpHiGKtoHxjDpaXyZXQSAvsMJ_6lN-iiKT7tw";
+      var oauthToken;
 
+      //test
+      //oauthToken = "ya29.1.AADtN_Xwblmng1vSFppDLBYvA262cNBXsHPnAsIU2pegCYkodOqwIHWeGBTQs6MtFPKjy-M";
+      //authorized = true;
 
+      // Use the API Loader script to load google.picker and gapi.auth.
       function onApiLoad() {
-         pickerApiLoaded = false;
-         $.ajax({
-            url: "gettoken",
-            data: {'appId':1, 'accountId':1},
-            type: "POST"
-            }).done(function(data){
-                //oauthToken = data["token"];
-                alert("oauthToken:"+oauthToken);
-             authorized = true;
-             gapi.load('picker', {'callback': onPickerApiLoad});
-            });
+          pickerApiLoaded = false;
+        gapi.load('auth', {'callback': onAuthApiLoad});
+        gapi.load('picker', {'callback': onPickerApiLoad});
       }
 
-
+      function onAuthApiLoad() {
+          if (!authorized)
+                window.gapi.auth.authorize(
+                    {
+                      'client_id': clientId,
+                      'scope': scope,
+                      'immediate': false
+                    },
+                    handleAuthResult);
+      }
 
       function onPickerApiLoad() {
         pickerApiLoaded = true;
@@ -59,6 +74,16 @@
             picker.setVisible(true);
       }
 
+      function handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+          oauthToken = authResult.access_token;
+          authorized = true;
+          if (!pickerCreated)
+            createPicker();
+          else
+            picker.setVisible(true);
+        }
+      }
 
       // Create and render a Picker object
       function createPicker() {
@@ -97,7 +122,7 @@
     </head>
   <body>
 
-    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -125,9 +150,9 @@
         </div>
       </div>
     </div>
-<div class="container">
-    <div id="container">
-        <button id="GooglePicker" onclick="onApiLoad()" class="btn-xs">Choose from GoogleDrive</button>
+
+    <div id="container" style="margin-top: 150px; margin-left: 30px">
+        <button id="GooglePicker" onclick="onApiLoad()">Choose from GoogleDrive</button>
         <!--form action="/selector/google/">
             <button class="btn btn-lg btn-primary btn-block" type="submit">Google</button>
         </form>
@@ -136,8 +161,7 @@
         </form-->
     </div>
 
-    <table id="showlist" class="table table-responsive">
-        <thead>
+    <table id="showlist" style="margin-left: 30px">
         <tr>
             <td>From</td>
             <td>Type</td>
@@ -145,9 +169,8 @@
             <td>Size</td>
             <td>Last Modified Time</td>
         </tr>
-        </thead>
     </table>
-</div>
+
   </body>
 </html>
 
