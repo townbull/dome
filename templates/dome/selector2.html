@@ -1,8 +1,4 @@
 {% load staticfiles %}
-{% load socialaccount %}
-
-
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -15,7 +11,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <!--Simple javascript to make easy to make POST with AJAX using Django. Based on django documentation-->
-    <script src="{% static 'bootstrap/js/csrf-solution.js' %}"></script>
+    <script src="{% static 'kiwi/js/csrf-solution.js' %}"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -27,30 +23,44 @@
 
 
       <script type="text/javascript">
-        //var developerKey = 'AIzaSyCl62qhKjnhpf2tEFEr94S8-ackQsMxiq0';
+
+
+      // The API developer key obtained from the Google Cloud Console.
+      //var developerKey = 'AIzaSyCl62qhKjnhpf2tEFEr94S8-ackQsMxiq0';
+
+      // The Client ID obtained from the Google Cloud Console.
+      //var clientId = '263593193734-9vp3qpd2o3ne178r7hv6g5lmfqnmred4.apps.googleusercontent.com';
+
+      // Scope to use to access user's photos.
+      //var scope = ['https://www.googleapis.com/auth/drive.readonly'];
+
       var pickerApiLoaded;
       var pickerCreated = false;
       var authorized = false;
       var picker;
       var oauthToken;
 
+      //test
+      oauthToken = "ya29.1.AADtN_XPnhDEgxRSHI-0BAKltKPdjnptCocVASKvEHgiNMcmMjsX-wqveDUS4ith";
+      authorized = true;
 
+      // Use the API Loader script to load google.picker and gapi.auth.
       function onApiLoad() {
-         pickerApiLoaded = false;
-         $.ajax({
-            url: "gettoken",
-            data: {'appId':1, 'accountId':1},
-            type: "POST"
-            }).done(function(data){
-                oauthToken = data["token"];
-             //oauthToken="ya29.1.AADtN_VpYYA6TWxCCkGtHp-D8VTIxt18Wtzj6VqcaXstKxss2Xilf2uDfkYm0H_pwguOQA";
-                alert("oauthToken:"+oauthToken);
-             authorized = true;
-             gapi.load('picker', {'callback': onPickerApiLoad});
-            });
+          pickerApiLoaded = false;
+        //gapi.load('auth', {'callback': onAuthApiLoad});
+        gapi.load('picker', {'callback': onPickerApiLoad});
       }
 
-
+      function onAuthApiLoad() {
+          if (!authorized)
+                window.gapi.auth.authorize(
+                    {
+                      'client_id': clientId,
+                      'scope': scope,
+                      'immediate': false
+                    },
+                    handleAuthResult);
+      }
 
       function onPickerApiLoad() {
         pickerApiLoaded = true;
@@ -60,6 +70,18 @@
             picker.setVisible(true);
       }
 
+      function handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+          oauthToken = authResult.access_token;
+            document.write(oauthToken);
+          //oauthToken = "ya29.1.AADtN_Xwblmng1vSFppDLBYvA262cNBXsHPnAsIU2pegCYkodOqwIHWeGBTQs6MtFPKjy-M";
+          authorized = true;
+          if (!pickerCreated)
+            createPicker();
+          else
+            picker.setVisible(true);
+        }
+      }
 
       // Create and render a Picker object
       function createPicker() {
@@ -108,24 +130,12 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Skymesh</a>
-          {% if user.is_authenticated %}
-          <a class="navbar-brand" href="#">Hi, {{ user.id }}!</a>
-          {% endif %}
-		  <button type="submit" class="btn btn-success">Add A Cloud</button>
-
         </div>
-        <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-            <a href="/accounts/logout/" class="btn btn-success">Logout</a>
-          </form>
+        <div class="navbar-text">
+          <a class="navbar-link" href="#">Hi, User Name!</a>
+		  <button type="button" class="btn btn-default">Add A Cloud</button>
         </div>
+        <p class="navbar-text navbar-right"><a href="#" class="navbar-link">Logout</a></p>
       </div>
     </div>
 <div class="container">

@@ -195,7 +195,8 @@ SOCIALACCOUNT_PROVIDERS = \
                   openid_url='https://www.google.com/accounts/o8/id')],
         },
     'google':
-        { 'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile'],
+        { 'SCOPE': ['https://www.googleapis.com/auth/userinfo.profile',
+                    'https://www.googleapis.com/auth/drive.readonly'],
           'AUTH_PARAMS': { 'access_type': 'offline' }
         }
 }
