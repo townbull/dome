@@ -23,47 +23,54 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-      <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="coohqjii958p7p4"></script>
+      <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js"
+              id="dropboxjs" data-app-key="coohqjii958p7p4"></script>
+      <!--
+      <script type="text/javascript" src="{% static 'bootstrap/js/googlePicker.js' %}"></script>
+      -->
+      <script>
+          /**
+ * Created by zhu on 3/16/14.
+ */
 
-
-      <script type="text/javascript">
-        //var developerKey = 'AIzaSyCl62qhKjnhpf2tEFEr94S8-ackQsMxiq0';
-      var pickerApiLoaded;
-      var pickerCreated = false;
-      var authorized = false;
+      //var pickerApiLoaded;
+      //var pickerCreated = false;
+      var authorized;
       var picker;
       var oauthToken;
 
 
-      function onApiLoad() {
-         pickerApiLoaded = false;
+      function onApiLoad(appId,accountId ) {
+         //pickerApiLoaded = false;
+          authorized = false;
          $.ajax({
             url: "gettoken",
-            data: {'appId':1, 'accountId':1},
+            data: {'appId':appId, 'accountId':accountId},
             type: "POST"
             }).done(function(data){
                 oauthToken = data["token"];
-             //oauthToken="ya29.1.AADtN_VpYYA6TWxCCkGtHp-D8VTIxt18Wtzj6VqcaXstKxss2Xilf2uDfkYm0H_pwguOQA";
                 alert("oauthToken:"+oauthToken);
              authorized = true;
-             gapi.load('picker', {'callback': onPickerApiLoad});
+             //gapi.load('picker', {'callback': onPickerApiLoad});
+             gapi.load('picker', {'callback': createPicker});
             });
       }
 
 
 
-      function onPickerApiLoad() {
-        pickerApiLoaded = true;
-          if (!pickerCreated)
-            createPicker();
-          else
-            picker.setVisible(true);
-      }
+//      function onPickerApiLoad() {
+//        pickerApiLoaded = true;
+//          if (!pickerCreated)
+//            createPicker();
+//          else
+//            picker.setVisible(true);
+//      }
 
 
       // Create and render a Picker object
       function createPicker() {
-        if (pickerApiLoaded && oauthToken) {
+        //if (pickerApiLoaded && oauthToken) {
+          if (oauthToken) {
               picker = new google.picker.PickerBuilder().
               addView(google.picker.ViewId.DOCS).
               enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
@@ -71,7 +78,7 @@
               //setDeveloperKey(developerKey).
               setCallback(pickerCallback).
               build();
-          pickerCreated = true;
+          //pickerCreated = true;
           picker.setVisible(true);
         }
       }
@@ -80,9 +87,10 @@
       function pickerCallback(data) {
         if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
             var jsonString = JSON.stringify(data[google.picker.Response.DOCUMENTS]);
+            alert(jsonString);
           $.ajax({
             url: "googleDrive/save",
-            data: {'source':'googleDrive', 'files':jsonString},
+            data: {'source':'googleDrive', 'files':jsonString,  'userId':{{ user.id }}},
             type: "POST"
 
         }).done(function(){
@@ -90,9 +98,22 @@
         });
 
         }
-
       }
-    </script>
+
+          function getChooser(appId, accountId){
+            $.ajax({
+                url: "gettoken",
+                data: {'appId':appId, 'accountId':accountId},
+                type: "POST"
+                }).done(function(data){
+                    oauthToken = data["token"];
+                    alert("oauthToken:"+oauthToken);
+                 authorized = true;
+                 //gapi.load('picker', {'callback': onPickerApiLoad});
+                 gapi.load('picker', {'callback': createPicker});
+                });
+          }
+      </script>
     <!-- The Google API Loader script. -->
     <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
     </head>
@@ -130,7 +151,7 @@
     </div>
 <div class="container">
     <div id="container">
-        <button id="GooglePicker" onclick="onApiLoad()" class="btn-xs">Choose from GoogleDrive</button>
+        <!--button id="GooglePicker" onclick="onApiLoad(1,4)" class="btn-xs">Choose from GoogleDrive</button-->
         <!--form action="/selector/google/">
             <button class="btn btn-lg btn-primary btn-block" type="submit">Google</button>
         </form>
@@ -145,17 +166,55 @@
             <td>From</td>
             <td>Type</td>
             <td>Name</td>
+            <!--
             <td>Size</td>
+            -->
             <td>Last Modified Time</td>
         </tr>
         </thead>
+    </table>
+    <hr>
+    <table id="chooser" class="table table-responsive">
+
     </table>
 </div>
   </body>
 </html>
 
 <script type="text/javascript">
-    $(function(){
+    //alert({{ user.id }});
+     $.ajax({
+            url: "getaccinfo",
+            data: {'userId':{{ user.id }}},
+            type: "POST"
+        }).done(function(data){
+         alert(JSON.stringify(data));
+            var rows = data["acc"];
+         for(var i=0; i<rows.length;i++){
+                var data = JSON.parse(rows[i].fields.extra_data);
+             if(rows[i].fields.provider == "google"){
+                $('#container').append("<button id='" + rows[i].pk + "' class='btn-xs " + rows[i].fields.provider
+                     + "' onclick='onApiLoad(1," + rows[i].pk + ")'>" + rows[i].pk + "." + data.name
+                     +  "@" + rows[i].fields.provider + "</button>")
+             //alert(data.name);
+         }else if(rows[i].fields.provider == "dropbox"){
+                 $('#container').append("<button id='" + rows[i].pk + "' class='btn-xs " + rows[i].fields.provider
+                     + "' onclick='getChooser(2," + rows[i].pk + ")'>" + rows[i].pk + "." + data.display_name
+                     +  "@" + rows[i].fields.provider + "</button>")
+             }
+         }
+
+        });
+</script>
+<!--
+<script type="text/javascript" src="{% static 'bootstrap/js/dropboxChooser.js' %}"></script>
+<script type="text/javascript" src="{% static 'bootstrap/js/showlist.js' %}"></script>
+-->
+<script>
+    /**
+ * Created by zhu on 3/16/14.
+ */
+$(function(){
             var options = {
 
     // Required. Called when a user selects an item in the Chooser.
@@ -164,7 +223,7 @@
         var jsonString = JSON.stringify(files);
         $.ajax({
             url: "dropbox/save",
-            data: {'source':'dropbox', 'files':jsonString},
+            data: {'source':'dropbox', 'files':jsonString, 'userId':{{ user.id }}},
             type: "POST"
 
         }).done(function(){
@@ -195,7 +254,19 @@
 };
             var button = Dropbox.createChooseButton(options);
             document.getElementById("container").appendChild(button);
-        $.ajax("showlist").done(function(data){
+
+        });
+
+
+    /**
+ * Created by zhu on 3/16/14.
+ */
+
+ $.ajax({
+            url: "showlist",
+            data: {'userId':{{ user.id }}},
+            type: "POST"
+        }).done(function(data){
 
             //var f = JSON.parse(data);
             var files = data["files"];
@@ -207,14 +278,14 @@
             var cell1 = row.insertCell(1);
             var cell2 = row.insertCell(2);
             var cell3 = row.insertCell(3);
-            var cell4 = row.insertCell(4);
+            //var cell4 = row.insertCell(4);
            // var img = document.createElement('img');
             cell0.innerHTML=files[i].fields.source;
             cell1.innerHTML="<img src="+ files[i].fields.icon+" height='16' width='16'>";
             cell2.innerHTML="<a href="+files[i].fields.link+" target='_blank'>"+files[i].fields.name+"</a>";
-            cell3.innerHTML=files[i].fields.size;
-            cell4.innerHTML=files[i].fields.lastEditTime;
+            //cell3.innerHTML=files[i].fields.size;
+            cell3.innerHTML=files[i].fields.lastEditTime;
         }
         });
-        });
-        </script>
+
+</script>

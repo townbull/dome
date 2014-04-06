@@ -13,11 +13,12 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core import serializers
 from kiwi.models import FileInfo
-from allauth.socialaccount.models import SocialToken
+from allauth.socialaccount.models import SocialToken, SocialAccount
 import json
 import datetime
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+import dropbox
 
 
 def Selector(request):
@@ -41,10 +42,13 @@ def SaveInfoGoogle(request):
     print request.POST.get('files')
     files = json.loads(request.POST.get('files'))
     src = request.POST.get('source')
+    uid = request.POST.get('userId')
     for f in files:
-        #print f["link"], f["bytes"], f["link"], f["icon"]
+        #print f["link"], f["bytes"], f["link"], f["icon"],  size=int(f["sizeBytes"])
         print datetime.datetime.fromtimestamp(int(f["lastEditedUtc"])/1000.0)
-        file = FileInfo(name=f["name"], link=f["url"], size=int(f["sizeBytes"]), icon=f["iconUrl"],source = src,lastEditTime=datetime.datetime.fromtimestamp(int(f["lastEditedUtc"])/1000.0))
+        file = FileInfo(name=f["name"], link=f["url"], icon=f["iconUrl"],
+                        source = src,lastEditTime=datetime.datetime.fromtimestamp(int(f["lastEditedUtc"])/1000.0),
+                        userId = uid)
 
         print 'google file set done'
         file.save()
@@ -60,10 +64,12 @@ def SaveInfoDropbox(request):
     print request.POST.get('files')
     files = json.loads(request.POST.get('files'))
     src = request.POST.get('source')
+    uid = request.POST.get('userId')
 
     for f in files:
         #print f["link"], f["bytes"], f["link"], f["icon"]
-        file = FileInfo(name=f["name"], link=f["link"], size=int(f["bytes"]), icon=f["icon"],source = src )
+        file = FileInfo(name=f["name"], link=f["link"], size=int(f["bytes"]), icon=f["icon"],source = src,
+                        userId = uid)
         # icon=f["icon"], thumbnail=f["thumbnail"])
         print 'dropbox file set done'
         file.save()
@@ -74,20 +80,41 @@ def SaveInfoDropbox(request):
 
 
 def Showlist(request):
-    files = FileInfo.objects.all()
+    uid = request.POST.get('userId')
+    files = FileInfo.objects.filter(userId=uid)
     data = serializers.serialize('json', files)
     data = '{"files":'+ data + '}'
     return HttpResponse(data, content_type='application/json')
 
 def GetToken(request):
     accountId = request.POST.get('accountId')
-    record = SocialToken.objects.get(account=accountId)
+    appId = request.POST.get('appId')
+    record = SocialToken.objects.get(account=accountId, app=appId )
     token = record.token
     print token
     data = '{"token":"'+ token + '"}'
     print data
     return HttpResponse(data, content_type='application/json')
 
+def GetAccInfo(request):
+    userId = request.POST.get('userId')
+    records = SocialAccount.objects.filter(user_id=userId)
+    print records
+    data = serializers.serialize('json', records)
+    data = '{"acc":'+ data + '}'
+    return HttpResponse(data, content_type='application/json')
+
+def GetChooserList(request):
+    accountId = request.POST.get('accountId')
+    appId = request.POST.get('appId')
+    record = SocialToken.objects.get(account=accountId, app=appId )
+    token = record.token
+    client = dropbox.client.DropboxClient(token)
+    folder_metadata = client.metadata('/')
+    print 'metadata: ', folder_metadata
+    data = serializers.serialize('json', folder_metadata)
+    data = '{"list":'+ data + '}'
+    return HttpResponse(data, content_type='application/json')
 """
 @login_required
 def authredirect(request):

@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^googleDrive/save$', views.SaveInfoGoogle, name='saveInfo_google'),
     url(r'^showlist$', views.Showlist, name='showlist'),
     url(r'^gettoken$', views.GetToken, name='gettoken'),
+    url(r'^getaccinfo$', views.GetAccInfo, name='getaccinfo'),
     # url(r'^$', views.authredirect, name='authredirect'),
     # url(r'^gdrive/$', views.IndexView.as_view(), name='index'),
 )

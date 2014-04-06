@@ -4,6 +4,7 @@ from django.db import models
 class FileInfo(models.Model):
     #FIXME: find out  more specific max-length
     #for CharField, max_legnth is required
+    userId = models.IntegerField()
     name = models.CharField(max_length=200)
     link = models.CharField(max_length=500)
     size = models.IntegerField(default=0)
