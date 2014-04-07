@@ -8,9 +8,10 @@ urlpatterns = patterns('',
     # prevent the extra are-you-sure-you-want-to-logout step on logout
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
 
+    url(r'^accounts/social/connections/$', RedirectView.as_view(url='/console/', permanent=False)),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^console/', include('dome.urls')),
+    url(r'^mesh/', include('kiwi.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', RedirectView.as_view(url='/console/', permanent=False), name='index'),
-
 )
