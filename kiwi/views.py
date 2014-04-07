@@ -14,7 +14,7 @@ def Selector(request):
     if not request.user.is_authenticated():
         login_url = getattr(settings, 'LOGIN_URL', None)
         return redirect('%s?next=%s' % (login_url, request.path))
-    return render(request, 'kiwi/selector.html')
+    return render(request, 'kiwi/selector_bak.html')
 
 
 def GooglePicker(request):
@@ -39,7 +39,7 @@ def SaveInfoGoogle(request):
         file.save()
         print 'google record save success'
 
-    return render(request, 'kiwi/selector.html')
+    return render(request, 'kiwi/selector_bak.html')
 
 
 #@csrf_exempt
@@ -58,7 +58,7 @@ def SaveInfoDropbox(request):
         file.save()
         print 'dropbox record save success'
 
-    return render('kiwi/selector.html')
+    return render('kiwi/selector_bak.html')
         #json.loads(FileInfo.objects.all())
 
 def Showlist(request):

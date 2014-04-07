@@ -1,13 +1,19 @@
 {% load staticfiles %}
 {% load socialaccount %}
 
-
-
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Skymesh</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="http://getbootstrap.com/assets/ico/favicon.ico">
+
+    <title>Skymesh Dashboard</title>
+
     <!-- Bootstrap -->
     <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -16,14 +22,97 @@
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <!--Simple javascript to make easy to make POST with AJAX using Django. Based on django documentation-->
     <script src="{% static 'bootstrap/js/csrf-solution.js' %}"></script>
+    <!-- Bootstrap core CSS
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    -->
+    <!-- Custom styles for this template -->
+    <link href="{% static 'custom/css/dashboard.css' %}" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-      <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js"
+    <style id="clearly_highlighting_css" type="text/css">
+        /* selection */
+        html.clearly_highlighting_enabled ::-moz-selection {
+            background: rgba(246, 238, 150, 0.99);
+        }
+        html.clearly_highlighting_enabled ::selection {
+            background: rgba(246, 238, 150, 0.99);
+        }
+        /* cursor */
+        html.clearly_highlighting_enabled {
+            /* cursor and hot-spot position -- requires a default cursor, after the URL one */
+            cursor: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--cursor.png") 14 16, text;
+        }
+        /* highlight tag */
+        em.clearly_highlight_element {
+            font-style: inherit !important;
+            font-weight: inherit !important;
+            background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow.png");
+            background-repeat: repeat-x;
+            background-position: top left;
+            background-size: 100% 100%;
+        }
+        /* the delete-buttons are positioned relative to this */
+        em.clearly_highlight_element.clearly_highlight_first {
+            position: relative;
+        }
+        /* delete buttons */
+        em.clearly_highlight_element a.clearly_highlight_delete_element {
+            display: none;
+            cursor: pointer;
+            padding: 0;
+            margin: 0;
+            line-height: 0;
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            left: -17px;
+            top: -17px;
+            background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite.png");
+            background-repeat: no-repeat;
+            background-position: 0px 0px;
+        }
+        em.clearly_highlight_element a.clearly_highlight_delete_element:hover {
+            background-position: -34px 0px;
+        }
+        /* retina */
+        @media (min--moz-device-pixel-ratio: 2), (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
+            em.clearly_highlight_element {
+                background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--yellow@2x.png");
+            }
+            em.clearly_highlight_element a.clearly_highlight_delete_element {
+                background-image: url("chrome-extension://pioclpoplcdbaefihamjohnefbikjilc/clearly/images/highlight--delete-sprite@2x.png");
+                background-size: 68px 34px;
+            }
+        }
+    </style>
+    <style id="holderjs-style" type="text/css"></style>
+    <style>
+        [touch-action="none"] {
+            -ms-touch-action: none;
+            touch-action: none;
+        }
+        [touch-action="pan-x"] {
+            -ms-touch-action: pan-x;
+            touch-action: pan-x;
+        }
+        [touch-action="pan-y"] {
+            -ms-touch-action: pan-y;
+            touch-action: pan-y;
+        }
+        [touch-action="scroll"], [touch-action="pan-x pan-y"], [touch-action="pan-y pan-x"] {
+            -ms-touch-action: pan-x pan-y;
+            touch-action: pan-x pan-y;
+        }
+    </style>
+
+    <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js"
               id="dropboxjs" data-app-key="coohqjii958p7p4"></script>
       <!--
       <script type="text/javascript" src="{% static 'bootstrap/js/googlePicker.js' %}"></script>
@@ -116,11 +205,12 @@
       </script>
     <!-- The Google API Loader script. -->
     <script type="text/javascript" src="https://apis.google.com/js/api.js"></script>
-    </head>
-  <body>
+  </head>
 
-    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
-        <div class="container">
+  <body style="">
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -129,57 +219,146 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Skymesh</a>
-          {% if user.is_authenticated %}
-          <a class="navbar-brand" href="#">Hi, {{ user.id }}!</a>
-          {% endif %}
-		  <button type="submit" class="btn btn-success">Add A Cloud</button>
-
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-            <a href="/accounts/logout/" class="btn btn-success">Logout</a>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a id="dropdownMenu1" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">
+                Profile <b class="caret"></b></a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                  <li class="active" role="presentation"><a role="menuitem" tabindex="-1" href="#">Settings</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Install</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Upgrade</a></li>
+                  <li role="presentation" class="divider"></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Sign Out</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
           </form>
         </div>
       </div>
-    </div>
-<div class="container">
-    <div id="container">
-        <!--button id="GooglePicker" onclick="onApiLoad(1,4)" class="btn-xs">Choose from GoogleDrive</button-->
-        <!--form action="/selector/google/">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Google</button>
-        </form>
-        <form action="/selector/dropbox/">
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Dropbox</button>
-        </form-->
-    </div>
+    </nav>
 
-    <table id="showlist" class="table table-responsive">
-        <thead>
-        <tr>
-            <td>From</td>
-            <td>Type</td>
-            <td>Name</td>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="selector.html">Overview</a></li>
+            <li><a href="drive.html">Google Drive</a></li>
+            <li><a href="drive.html">Dropbox</a></li>
+            <li><a href="drive.html">Meshed Files</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">My Sky
+          <!-- <button type="button" class="btn btn-lg btn-info"> + Add a Cloud</button> -->
+            <div class="btn-group pull-right">
+              <button type="button" class="btn btn-lg btn-info dropdown-toggle" data-toggle="dropdown">
+                + Add Cloud <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li role="presentation" class="dropdown-header">Supported Clouds</li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Google Drive</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Dropbox</a></li>
+              </ul>
+            </div>
+
+          </h1>
+
+          <div id="container" class="row placeholders">
+
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <a href="drive.html"><img data-src="holder.js/200x200/auto/sky" class="img-responsive" alt="200x200" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzBEOEZEQiI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojZmZmO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4="></a>
+              <h4>Google Drive</h4>
+              <span>username@example.com</span><br/>
+              <span class="text-muted">5.32 GB of 15 GB Used</span>
+            </div>
+            <div class="col-xs-6 col-sm-3 placeholder">
+              <a href="drive.html"><img data-src="holder.js/200x200/auto/vine" class="img-responsive" alt="200x200" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzM5REJBQyI+PC9yZWN0Pjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjEwMCIgeT0iMTAwIiBzdHlsZT0iZmlsbDojMUUyOTJDO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1zaXplOjEzcHg7Zm9udC1mYW1pbHk6QXJpYWwsSGVsdmV0aWNhLHNhbnMtc2VyaWY7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+MjAweDIwMDwvdGV4dD48L3N2Zz4="></a>
+              <h4>Dropbox</h4>
+              <span>username@example.com</span><br/>
+              <span class="text-muted">12.5 GB of 22.25 GB Used</span>
+            </div>
+
+          </div>
+
+
+          <h2 class="sub-header"> Meshed Files
+          <span class="badge">3</span>
+          <button class="btn btn-default pull-right" data-toggle="modal" data-target="#meshfiles">+ Mesh More</button>
             <!--
-            <td>Size</td>
+            <div class="btn-group pull-right">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                + Mesh More <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li role="presentation" class="dropdown-header">Choose file from</li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Google Drive</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Dropbox</a></li>
+              </ul>
+            </div>
             -->
-            <td>Last Modified Time</td>
-        </tr>
-        </thead>
-    </table>
-    <hr>
-    <table id="chooser" class="table table-responsive">
+          </h2>
+          <div class="table-responsive">
+            <table id="showlist" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Kind</th>
+                  <th>From</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
 
-    </table>
-</div>
-  </body>
-</html>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals linked from the page buttons
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <div class="modal fade" id="meshfiles" tabindex="-1" role="dialog" aria-labelledby="linkedAccounts" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="linkedAccounts">Meshed Accounts</h4>
+          </div>
+          <div class="modal-body row">
+          	<iframe width="100%" height="700px" src="drive.html" frameborder="0" scrolling="yes" allowtransparency="true"></iframe>
+            <!--
+<div class="col-xs-6 col-sm-3">
+              <a href="#google_picker"><img class="img-responsive" alt="Google" src="img/google-drive-logo.png">
+              <span>xxx@example.com</span></a>
+            </div>
+
+            <div class="col-xs-6 col-sm-3">
+              <a href="#dropbox_chooser"><img class="img-responsive" alt="Dropbox" src="img/dropbox-logo.png">
+              <span>xxx@example.com</span></a>
+            </div>
+-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script-->
+    <script src="http://getbootstrap.com/assets/js/docs.min.js"></script>
+
+
+
+</body></html>
 
 <script type="text/javascript">
     //alert({{ user.id }});
@@ -280,11 +459,12 @@ $(function(){
             var cell3 = row.insertCell(3);
             //var cell4 = row.insertCell(4);
            // var img = document.createElement('img');
-            cell0.innerHTML=files[i].fields.source;
+            cell0.innerHTML="<a href="+files[i].fields.link+" target='_blank'>"+files[i].fields.name+"</a>";
             cell1.innerHTML="<img src="+ files[i].fields.icon+" height='16' width='16'>";
-            cell2.innerHTML="<a href="+files[i].fields.link+" target='_blank'>"+files[i].fields.name+"</a>";
+            cell2.innerHTML=files[i].fields.source;
+            cell3.innerHTML='<span type="button" class="btn btn-xs btn-success">synced</span>';
             //cell3.innerHTML=files[i].fields.size;
-            cell3.innerHTML=files[i].fields.lastEditTime;
+            //cell3.innerHTML=files[i].fields.lastEditTime;
         }
         });
 
