@@ -7,3 +7,4 @@ pydrive
 oauth2client
 dropbox>=2.0.0
 django-allauth
+south

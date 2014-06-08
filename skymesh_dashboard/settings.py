@@ -57,7 +57,7 @@ INSTALLED_APPS = (
     # The Django sites framework is required
     'django.contrib.sites',
 
-    'bootstrapform',
+    # 'bootstrapform',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
